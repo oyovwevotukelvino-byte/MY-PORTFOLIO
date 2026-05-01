@@ -5,9 +5,24 @@ function Counter({ initialCount = 0, step = 1, min = -Infinity, max = Infinity }
   const [currentStep, setCurrentStep] = useState(step);
 
   // Functions
-  const inc = () => setCount((c) => Math.min(c + currentStep, max));
-  const dec = () => setCount((c) => Math.max(c - currentStep, min));
-  const reset = () => setCount(initialCount);
+  const inc = () =>
+    setCount((c) => {
+      const newCount = Math.min(c + currentStep, max);
+      console.log(`Incremented: ${c} + ${currentStep} = ${newCount}`);
+      return newCount;
+    });
+
+  const dec = () =>
+    setCount((c) => {
+      const newCount = Math.max(c - currentStep, min);
+      console.log(`Decremented: ${c} - ${currentStep} = ${newCount}`);
+      return newCount;
+    });
+
+  const reset = () => {
+    console.log(`Reset: count set back to ${initialCount}`);
+    setCount(initialCount);
+  };
 
   // Keyboard control
   const handleKey = (e) => {
@@ -29,11 +44,12 @@ function Counter({ initialCount = 0, step = 1, min = -Infinity, max = Infinity }
         borderRadius: 8,
         boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
         maxWidth: 260,
+        backgroundColor: "#222", // dark background for contrast
       }}
       aria-label="Counter component"
     >
       {/* Current Count */}
-      <div style={{ fontSize: 28, fontWeight: 700 }}>{count}</div>
+      <div style={{ fontSize: 28, fontWeight: 700, color: "white" }}>{count}</div>
 
       {/* Buttons */}
       <div style={{ display: "flex", gap: 8 }}>
@@ -49,7 +65,7 @@ function Counter({ initialCount = 0, step = 1, min = -Infinity, max = Infinity }
       </div>
 
       {/* Step input */}
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: 8, alignItems: "center", color: "white" }}>
         <label style={{ fontSize: 12 }}>Step</label>
         <input
           type="number"
@@ -64,7 +80,7 @@ function Counter({ initialCount = 0, step = 1, min = -Infinity, max = Infinity }
         />
       </div>
 
-      <small style={{ color: "#666" }}>
+      <small style={{ color: "white" }}>
         Use ↑ / ↓ to change, R to reset
       </small>
     </div>

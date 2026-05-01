@@ -1,0 +1,42 @@
+export const projects = [
+  {
+    id: 1,
+    title: 'Nora Clouds',
+    desc: 'A full-stack cloud platform built for real-world business use cases.',
+    tech: ['React', 'Node.js', 'Tailwind', 'Firebase'],
+    image: 'https://noraclouds.vercel.app/og-image.png', // or use a screenshot
+    live: 'https://noraclouds.vercel.app/',
+    github: '',
+    featured: true,
+  },
+  {
+    id: 2,
+    title: 'Weather App',
+    desc: 'Real-time weather app with live forecasts and location detection.',
+    tech: ['React', 'Weather API', 'Tailwind'],
+    image: 'https://weather-app-network.vercel.app/og-image.png',
+    live: 'https://weather-app-network.vercel.app/',
+    github: '',
+    featured: false,
+  },
+  {
+    id: 3,
+    title: 'E-Commerce Store',
+    desc: 'Full-featured online store with cart, checkout and product listings.',
+    tech: ['React', 'Netlify', 'Tailwind'],
+    image: 'https://ecommercebuynow.netlify.app/og-image.png',
+    live: 'https://ecommercebuynow.netlify.app/',
+    github: '',
+    featured: false,
+  },
+  {
+    id: 4,
+    title: 'Tic Tac Toe',
+    desc: 'Interactive two-player Tic Tac Toe game with clean UI.',
+    tech: ['React', 'Vercel'],
+    image: 'https://tic-tac-toe-game-app-one.vercel.app/og-image.png',
+    live: 'https://tic-tac-toe-game-app-one.vercel.app/',
+    github: '',
+    featured: false,
+  },
+];
