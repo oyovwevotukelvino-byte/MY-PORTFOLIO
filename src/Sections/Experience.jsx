@@ -33,10 +33,10 @@ function Experience() {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
-                className={`relative flex md:flex-row gap-4 md:gap-8 items-start pl-10 md:pl-0 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                className={`relative flex md:flex-row gap-4 md:gap-8 items-start pl-1 md:pl-0 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
               >
                 {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 top-6 w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full glow shadow-xl border-2 md:border-4 border-black z-10" />
+                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 top-6 w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full glow shadow-xl border-2 md:border-4 border-black z-10" />
 
                 {/* Content */}
                 <div className="flex-1 p-4 md:p-8 rounded-2xl bg-gray-900/50 backdrop-blur-md border border-white/20 glow-hover hover:border-emerald-500/50 transition-all md:w-2/3">

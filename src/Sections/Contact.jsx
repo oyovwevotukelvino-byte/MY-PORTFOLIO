@@ -97,9 +97,9 @@ function Contact({ config = contactConfig }) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className={`glow-hover group p-8 rounded-2xl border transition-all cursor-pointer ${
+                className={`glow-hover group p-5 rounded-2xl border transition-all cursor-pointer ${
                   contact.primary 
-                    ? 'border-emerald-500/50 bg-emerald-500/5 md:col-span-2 shadow-2xl glow' 
+                    ? 'border-emerald-500/50 bg-emerald-500/5  shadow-2xl glow' 
                     : 'border-white/20 bg-black/30 hover:border-emerald-400/50 hover:bg-emerald-500/5'
                 }`}
                 onClick={() => openLink(contact.link)}

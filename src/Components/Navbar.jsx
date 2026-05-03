@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Button from "./Button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun } from "lucide-react";
+import { useTheme } from "../theme/ThemeProvider";
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
+    const { isDark, toggleTheme } = useTheme();
 
     const scrollToSection = (id) => {
         const element = document.getElementById(id);
@@ -11,6 +13,11 @@ const Navbar = () => {
             element.scrollIntoView({ behavior: "smooth" });
         }
         setOpen(false); // Close mobile menu
+    };
+
+    const toggleThemeMode = () => {
+        toggleTheme();
+        setOpen(false); // Close menu after toggle
     };
 
     return (
@@ -54,6 +61,14 @@ const Navbar = () => {
                         <li onClick={() => scrollToSection('projects')}>Projects</li>
                         <li onClick={() => scrollToSection('mindset')}>Mindset</li>
                         <li onClick={() => scrollToSection('experience')}>Experience</li>
+                        <li 
+                          onClick={toggleThemeMode}
+                          className='flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-all cursor-pointer'
+                          title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                        >
+                          {isDark ? <Sun size={24} className='text-yellow-400' /> : <Moon size={24} className='text-blue-400' />}
+                          <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+                        </li>
                     </ul>
 
                     <div className='mt-6'>
