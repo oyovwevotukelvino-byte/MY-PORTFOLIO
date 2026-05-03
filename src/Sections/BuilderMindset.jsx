@@ -5,27 +5,27 @@ import { Lightbulb, MapPin, TrendingUp, DollarSign, Zap } from 'lucide-react';
 
 function BuilderMindset() {
   return (
-    <section id="mindset" className="w-full py-24 px-6 bg-gradient-to-b from-gray-900/50 to-black/30 border-y border-white/10">
+<section id="mindset" className="w-full py-16 md:py-24 px-4 md:px-6 bg-gradient-to-b from-gray-900/50 to-black/30 border-y border-white/10">
       <div className="max-w-6xl mx-auto">
         <Motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <div className="inline-flex items-center gap-3 bg-yellow-500/20 text-yellow-400 px-6 py-3 rounded-full mb-8 glow-hover">
             <Lightbulb className="w-6 h-6" />
             <span className="font-semibold uppercase tracking-wide text-sm">Builder Mindset</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 bg-clip-text text-transparent mb-6 glow">
+          <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 bg-clip-text text-transparent mb-6 glow">
             Beyond Code
           </h2>
-          <p className="text-gray-400 max-w-3xl mx-auto text-xl leading-relaxed">
+          <p className="text-gray-400 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
             Most developers code. I build businesses. Here's what drives my work.
           </p>
         </Motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20">
           {/* Export Business */}
           <Motion.div
             initial={{ opacity: 0, scale: 0.9 }}

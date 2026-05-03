@@ -14,13 +14,13 @@ const Navbar = () => {
     };
 
     return (
-        <nav className='flex justify-between items-center px-8 py-4 text-white border-b border-white/30 backdrop-blur-md sticky top-0 z-50'>
+<nav className='flex justify-between items-center px-4 md:px-8 py-4 text-white border-b border-white/30 backdrop-blur-md sticky top-0 z-50'>
             <a 
                 href="#hero" 
                 onClick={(e) => {e.preventDefault(); scrollToSection('hero');}}
                 className='font-bold text-xl neon-text cursor-pointer'
             >
-                Oyovwevotu Kelvin
+                Oyovwevotu Kelvin 
             </a>
 
             {/* Desktop Menu */}

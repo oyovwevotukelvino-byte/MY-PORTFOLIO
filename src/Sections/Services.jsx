@@ -17,24 +17,24 @@ function Skills() {
   };
 
   return (
-    <section id="skills" className="w-full py-24 px-6 bg-black/30 border-y border-white/10">
+<section id="skills" className="w-full py-16 md:py-24 px-4 md:px-6 bg-black/30 border-y border-white/10">
       <div className="max-w-6xl mx-auto">
         <Motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 neon-text glow">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 neon-text glow">
             Skills &amp; Expertise
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-xl">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">
             Real-world tools I use to build scalable digital products and businesses.
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto mt-4 glow rounded-full" />
         </Motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {skills.map((skill, index) => {
             const Icon = getIcon(skill.title);
             return (

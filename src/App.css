@@ -1,8 +1,17 @@
 #root {
-  width: 1300px;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0px;
   text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #root {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .logo {

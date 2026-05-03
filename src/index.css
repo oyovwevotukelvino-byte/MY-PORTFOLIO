@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 /* Glow utilities for portfolio */
 .glow {
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -11,4 +16,31 @@
 
 .neon-text {
   text-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+}
+
+/* Theme-specific overrides */
+.dark {
+  color-scheme: dark;
+}
+
+.light {
+  color-scheme: light;
+}
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix for backdrop-filter in some browsers */
+@supports (backdrop-filter: blur(12px)) {
+  .glass-effect {
+    backdrop-filter: blur(12px);
+  }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .glass-effect {
+    background: rgba(0, 0, 0, 0.8);
+  }
 }

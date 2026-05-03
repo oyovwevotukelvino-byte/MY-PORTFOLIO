@@ -1,75 +1,97 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Mail, Github, Linkedin, MapPin, MessageCircle, ArrowRight } from 'lucide-react';
+import { useTheme } from '../theme/ThemeProvider';
+import { contactConfig } from '../data/contact';
 
-const contactInfo = [
-  {
-    id: 1,
-    icon: MessageCircle,
-    title: 'WhatsApp',
-    desc: 'Fastest way to connect',
-    link: 'https://wa.me/2347062140486',
-    primary: true
+/* ================= STYLES ================= */
+const getContactStyles = (colors) => ({
+  section: {
+    background: `linear-gradient(to bottom, ${colors.bg}, ${colors.bgSecondary})`,
   },
-  {
-    id: 2,
-    icon: Mail,
-    title: 'Email',
-    desc: 'oyovwevotukelvino@gmail.com',
-    link: 'mailto:oyovwevotukelvino@gmail.com',
-    primary: false
+  primaryCard: {
+    border: `${colors.accentEmerald}80`,
+    background: `${colors.accentEmerald}0D`,
+    glow: colors.glow,
   },
-  {
-    id: 3,
-    icon: Github,
-    title: 'GitHub',
-    desc: '@oyovwevotukelvino-byte',
-    link: 'https://github.com/oyovwevotukelvino-byte',
-    primary: false
+  card: {
+    border: `${colors.cardBorder}`,
+    background: `${colors.bg}50`,
+    hoverBorder: `${colors.accentEmerald}80`,
+    hoverBg: `${colors.accentEmerald}0D`,
   },
-  {
-    id: 4,
-    icon: Linkedin,
-    title: 'LinkedIn',
-    desc: 'Oyovwevotu Kelvin',
-    link: 'https://www.linkedin.com/in/oyovwevotukelvin/',
-    primary: false
-  }
-];
+  iconPrimary: {
+    bg: `linear-gradient(135deg, ${colors.accentEmerald}50, ${colors.accent}50)`,
+    border: `${colors.accentEmerald}60`,
+    color: colors.accentEmerald,
+  },
+  iconSecondary: {
+    bg: `${colors.glass}`,
+    border: `${colors.glassBorder}`,
+    color: colors.textMuted,
+    hoverColor: colors.accentEmerald,
+  },
+  titlePrimary: {
+    color: colors.accentEmerald,
+    textShadow: colors.glowText,
+  },
+  titleSecondary: {
+    color: colors.textPrimary,
+    hoverColor: colors.accentEmerald,
+  },
+  descPrimary: colors.accentEmerald,
+  descSecondary: colors.textMuted,
+  locationCard: {
+    background: `${colors.bg}50`,
+    border: colors.cardBorder,
+    color: colors.textMuted,
+  },
+  border: colors.cardBorder,
+});
 
-function Contact() {
+/* ================= COMPONENT ================= */
+function Contact({ config = contactConfig }) {
+  const { colors } = useTheme();
+  const styles = getContactStyles(colors);
+
   const openLink = (url) => {
     window.open(url, '_blank');
   };
 
+  // Destructure config
+  const { heading, description, note, contacts, location, copyright } = config;
+
   return (
-    <section id="contact" className="w-full py-24 px-6 bg-gradient-to-b from-black to-gray-900/50">
+    <section 
+      id="contact" 
+      className="w-full py-16 md:py-24 px-4 md:px-6"
+      style={styles.section}
+    >
       <div className="max-w-4xl mx-auto">
         {/* Hero Intro */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 neon-text glow">
-            Let's Build Something
+          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 neon-text glow">
+            {heading}
           </h2>
-          <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-            Have an idea or opportunity? Let's build it. I'm available for partnerships, projects, 
-            or turning your business concept into reality.
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed">
+            {description}
           </p>
-          <div className="text-gray-500 text-lg mb-16">
-            Primary: WhatsApp (fastest in Nigeria)
+          <div className="text-gray-500 text-base md:text-lg mb-12 md:mb-16">
+            {note}
           </div>
-        </motion.div>
+        </Motion.div>
 
         {/* Contact Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-20">
-          {contactInfo.map((contact, index) => {
-            const Icon = contact.icon;
+        <div className="grid sm:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-20">
+          {contacts.map((contact, index) => {
+            const Icon = MessageCircle; // Use fixed icon for now, or map icons
             return (
-              <motion.div
+              <Motion.div
                 key={contact.id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -107,13 +129,13 @@ function Contact() {
                   <span>Click to connect</span>
                   <ArrowRight className={`w-5 h-5 ${contact.primary ? 'ml-auto' : ''} group-hover:translate-x-1 transition-transform`} />
                 </div>
-              </motion.div>
+              </Motion.div>
             );
           })}
         </div>
 
         {/* Location */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -121,12 +143,12 @@ function Contact() {
         >
           <div className="glow-hover inline-flex items-center gap-3 p-6 bg-black/30 rounded-2xl border border-white/20 max-w-sm mx-auto">
             <MapPin className="w-6 h-6 text-gray-400" />
-            <span className="text-gray-400">Abuja, Nigeria • Open to Remote/Global</span>
+            <span className="text-gray-400">{location}</span>
           </div>
           <p className="text-gray-600 text-sm mt-6">
-            © 2025 Oyovwevotu Kelvin. Built in silence.
+            {copyright}
           </p>
-        </motion.div>
+        </Motion.div>
       </div>
     </section>
   );

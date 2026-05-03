@@ -13,18 +13,18 @@ function Projects() {
   };
 
   return (
-    <section id="projects" className="w-full py-24 px-6 bg-gray-900/30 border-y border-white/10">
+<section id="projects" className="w-full py-16 md:py-24 px-4 md:px-6 bg-gray-900/30 border-y border-white/10">
       <div className="max-w-7xl mx-auto">
         <Motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 neon-text glow">
+          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 neon-text glow">
             Featured Projects
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-xl">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">
             Real products I've built that solve business problems and generate revenue.
           </p>
         </Motion.div>
@@ -35,10 +35,10 @@ function Projects() {
             initial={{ opacity: 0, x: -100 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="glow-hover group mb-20 rounded-3xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all"
+            className="glow-hover group mb-12 md:mb-20 rounded-3xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all"
             whileHover={{ scale: 1.02 }}
           >
-            <div className="grid md:grid-cols-2 items-center gap-12 p-12">
+            <div className="grid md:grid-cols-2 items-center gap-6 md:gap-12 p-6 md:p-12">
               <div className="order-2 md:order-1">
                 <span className="inline-block bg-blue-600/20 text-blue-400 px-4 py-1 rounded-full text-sm font-semibold mb-6 glow">
                   Featured Project

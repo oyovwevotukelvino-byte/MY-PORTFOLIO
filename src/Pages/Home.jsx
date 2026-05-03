@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../Components/Navbar';
+import ThemeToggle from '../Components/ThemeToggle';
 import Hero from '../Sections/Hero';
 import About from '../Sections/About';
 import Services from '../Sections/Services'; // Now Skills
@@ -19,6 +20,7 @@ function Home() {
       <BuilderMindset />
       <Experience />
       <Contact />
+      <ThemeToggle />
     </div>
   );
 }
