@@ -4,8 +4,10 @@ import Button from '../Components/Button';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
 import { projects } from '../data/projects';
 
+
 function Projects() {
   const featured = projects.find(p => p.featured);
+  console.log("IMAGE:", featured?.image);
   const secondary = projects.filter(p => !p.featured);
 
   const openLink = (url) => {
