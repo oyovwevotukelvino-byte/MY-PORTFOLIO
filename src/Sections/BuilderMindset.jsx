@@ -40,7 +40,7 @@ function BuilderMindset() {
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-yellow-400">
-                  Nigeria → Dubai Export
+                  International Export Operations | Nigeria → UAE (Dubai) & Global Markets
                 </h3>
                 <p className="text-gray-300">
                   Building platform to connect local supply with global demand. Solving real logistics + commerce problems.
