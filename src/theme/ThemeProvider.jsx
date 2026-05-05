@@ -33,7 +33,7 @@ export function ThemeProvider({ children }) {
     const stored = localStorage.getItem("theme-mode");
     if (stored === "dark" || stored === "light") return stored;
 
-    return getSystemTheme();
+    return "dark";
   });
 
   /**
@@ -79,24 +79,7 @@ export function ThemeProvider({ children }) {
   /**
    * SYSTEM THEME AUTO-SYNC
    */
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleChange = (e) => {
-      const stored = localStorage.getItem("theme-mode");
-
-      // Only auto-update if user hasn't manually chosen
-      if (!stored) {
-        setMode(e.matches ? "dark" : "light");
-      }
-    };
-
-    media.addEventListener("change", handleChange);
-
-    return () => media.removeEventListener("change", handleChange);
-  }, []);
+  
 
   /**
    * CONTEXT VALUE (FLAT STRUCTURE)
