@@ -2,6 +2,7 @@ import noraImg from '../assets/nora.png';
 import weatherImg from '../assets/weather.png';
 import ecommerceImg from '../assets/ecommerce.png';
 import ticImg from '../assets/tictactoe.png';
+import sunflexImg from '../assets/sunflex.png';
 export const projects = [
   {
     id: 1,
@@ -40,6 +41,16 @@ export const projects = [
     tech: ['React', 'Vercel'],
     image: ticImg,
     live: 'https://tic-tac-toe-game-app-one.vercel.app/',
+    github: '',
+    featured: false,
+  },
+  {
+    id: 5,
+    title: 'Sun Flex Solar Galaxy',
+    desc: ' Premium Unlimited Solar Energy For Modern Africa solar installations, energy .',
+    tech: ['React', 'Vercel'],
+    image: sunflexImg,
+    live: 'https://sunflexsolargalaxy.vercel.app/',
     github: '',
     featured: false,
   },
