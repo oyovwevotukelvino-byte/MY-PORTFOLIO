@@ -24,4 +24,13 @@ export const experience = [
     desc: 'Developing NoraClouds (Grok AI chatbot) and export/digital commerce platforms.',
     company: 'Entrepreneur Projects'
   }
+  , 
+  {
+    id: 4,
+    year: '2026',
+    title: 'Solar Energy For Modern Africa + business systems',
+    desc: 'A solar-powered Africa where every sunrise brings sustainable energy independence, economic growth, and a cleaner tomorrow for 1.4 billion people.',
+    company: 'Community Impact  / Smart Innovation Projects'
+  },
+
 ];
