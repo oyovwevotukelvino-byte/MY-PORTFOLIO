@@ -1,65 +1,46 @@
-/**
- * Hero Configuration
- * All Hero section content in one place - making it easy to update without touching UI code
- */
+// ============================================================
+// HERO DATA — src/data/hero.js
+// Edit this file to update all hero content from one place.
+// ============================================================
 
-export const homeHero = {
-  // Location badge
-  location: {
-    text: 'Abuja, Nigeria',
-    showDot: true,
+export const heroData = {
+  name: {
+    first: 'Oyovwevotu',
+    last:  'Kelvin',
+    short: 'Kelvin',
+    initials: 'OK',
   },
-  
-  // Main headline
-  title: {
-    prefix: 'SOFTWARE',      // First line
-    middle: 'DEVELOPER',    // Second line  
-    highlight: '& ENTREPRENEUR', // Gradient highlighted
-  },
-  
-  // Subtitle/tagline
-  tagline: 'Building Real-World Digital Products',
-  
-  // Description
-  description: 'I design, build, and scale applications that solve real business problems.',
-  
-  // CTA Buttons
-  buttons: {
-    primary: {
-      text: 'View My Work',
-      action: 'projects', // section ID to scroll to
-      icon: 'arrow',      // ArrowRight
-    },
-    secondary: {
-      text: "Let's Work",
-      action: 'contact',
-      icon: 'arrow',
-    },
-  },
-  
-  // Stats to display
+
+  role: 'Full-Stack Developer, Entrepreneur & Creative Builder',
+
+  tagline:
+    'I build scalable web applications, digital products, and startup ideas that combine technology, business, creativity, and innovation.',
+
+  availableForWork: true,   // toggles the badge
+  availabilityLabel: 'Available for new opportunities',
+
+  location: 'Abuja, Nigeria',
+
   stats: [
-    { num: '12+', label: 'Projects' },
-    { num: '3+', label: 'Years Exp.' },
-    { num: '5', label: 'Tech Stacks' },
+    { value: '3+',         label: 'Years building'      },
+    { value: '10+',        label: 'Projects shipped'     },
+    { value: 'Full-Stack', label: 'React · Node · DBs'  },
   ],
-  
-  // Tech stack marquee
-  tech: [
-    'React', 'Node.js', 'Next.js', 'Tailwind', 'MongoDB',
-    'Express', 'Paystack', 'Firebase', 'Figma', 'Git',
-    'APIs', 'Full-Stack'
-  ],
-  
-  // Animation settings
-  animations: {
-    hero: { y: 30, delay: 0 },
-    title: { y: 30, delay: 0.1 },
-    description: { y: 16, delay: 0.2 },
-    buttons: { y: 16, delay: 0.3 },
-    stats: { stagger: 0.1 },
-    marquee: { duration: 30 },
-  },
-};
 
-export default homeHero;
+  ctas: {
+    primary:   { label: 'View Projects',     href: '/projects'              },
+    secondary: { label: 'Download Resume',   href: '/resume.pdf', external: true },
+    tertiary:  { label: 'Contact Me',        href: '/contact'               },
+  },
+
+  socials: [
+    { platform: 'GitHub',   icon: 'brand-github',   href: 'https://github.com/'            },
+    { platform: 'LinkedIn', icon: 'brand-linkedin',  href: 'https://linkedin.com/in/'       },
+    { platform: 'Email',    icon: 'mail',            href: 'mailto:hello@example.com'       },
+    { platform: 'Twitter',  icon: 'brand-x',         href: 'https://x.com/'                },
+  ],
+
+  // Optional: path to your actual photo.
+  // Set to null to use the initials avatar fallback.
+  profileImage: null, // e.g. '/images/kelvin.jpg'
+};

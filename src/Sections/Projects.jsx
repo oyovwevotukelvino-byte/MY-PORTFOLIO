@@ -1,168 +1,560 @@
-import React from 'react';
+import { useState } from 'react';
 import { motion as Motion } from 'framer-motion';
-import Button from '../Components/Button';
-import { ExternalLink, Github, ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { projects } from '../data/projects';
 
+// ── Helpers ──────────────────────────────────────────────────
+const getDesc      = p => p.tagline  || p.desc        || '';
+const getTech      = p => p.tags     || p.tech        || [];
+const getImage     = p => p.coverImage || p.image     || null;
+const getCategory  = p => p.category || 'Project';
+const getStatus    = p => p.status   || 'Live';
+const getYear      = p => p.year     || '';
 
-function Projects() {
-  const featured = projects.find(p => p.featured);
-  console.log("IMAGE:", featured?.image);
-  const secondary = projects.filter(p => !p.featured);
+const STATUS_STYLE = {
+  'Live':        { bg: 'rgba(74,222,128,0.1)',   border: 'rgba(74,222,128,0.25)',   color: '#4ade80'  },
+  'In Progress': { bg: 'rgba(251,191,36,0.1)',   border: 'rgba(251,191,36,0.25)',   color: '#fbbf24'  },
+  'Archive':     { bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)',   color: 'rgba(255,255,255,0.4)' },
+};
 
-  const openLink = (url) => {
-    window.open(url, '_blank');
-  };
+function TechPill({ label }) {
+  return (
+    <span style={{
+      fontFamily: 'var(--font-mono, monospace)',
+      fontSize: '11px',
+      color: 'rgba(255,255,255,0.45)',
+      background: 'rgba(255,255,255,0.04)',
+      border: '1px solid rgba(255,255,255,0.1)',
+      padding: '4px 10px',
+      borderRadius: '9999px',
+      whiteSpace: 'nowrap',
+    }}>
+      {label}
+    </span>
+  );
+}
+
+function StatusBadge({ status }) {
+  const s = STATUS_STYLE[status] || STATUS_STYLE['Live'];
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: '5px',
+      fontSize: '10.5px', fontWeight: 500,
+      padding: '3px 10px', borderRadius: '9999px',
+      background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+    }}>
+      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
+      {status}
+    </span>
+  );
+}
+
+function CoverImage({ src, title, height = 240 }) {
+  const [errored, setErrored] = useState(false);
+
+  if (src && !errored) {
+    return (
+      <img
+        src={src}
+        alt={title}
+        onError={() => setErrored(true)}
+        style={{
+          width: '100%', height: `${height}px`,
+          objectFit: 'cover', display: 'block',
+        }}
+      />
+    );
+  }
 
   return (
-<section id="projects" className="w-full py-16 md:py-24 px-4 md:px-6 bg-gray-900/30 border-y border-white/10">
-      <div className="max-w-7xl mx-auto">
+    <div style={{
+      width: '100%', height: `${height}px`,
+      background: 'linear-gradient(135deg, rgba(124,106,247,0.18) 0%, rgba(124,106,247,0.04) 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <span style={{
+        fontFamily: 'var(--font-display, sans-serif)',
+        fontWeight: 800, fontSize: '64px',
+        color: 'rgba(124,106,247,0.2)',
+        letterSpacing: '-0.05em', userSelect: 'none',
+      }}>
+        {title?.charAt(0) || '?'}
+      </span>
+    </div>
+  );
+}
+
+function FeaturedCard({ project }) {
+  const tech   = getTech(project);
+  const image  = getImage(project);
+  const status = getStatus(project);
+
+  return (
+    <Motion.article
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '0',
+        background: 'rgba(17,17,19,1)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        marginBottom: '24px',
+        transition: 'border-color 0.2s ease',
+      }}
+      className="featured-card"
+      whileHover={{ borderColor: 'rgba(124,106,247,0.35)' }}
+    >
+      <div style={{ padding: '40px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+          <span style={{
+            fontFamily: 'var(--font-mono, monospace)',
+            fontSize: '10.5px', fontWeight: 500,
+            color: 'rgba(168,155,248,1)',
+            background: 'rgba(124,106,247,0.12)',
+            border: '1px solid rgba(124,106,247,0.25)',
+            padding: '3px 10px', borderRadius: '9999px',
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+          }}>
+            Featured
+          </span>
+          <StatusBadge status={status} />
+          {getYear(project) && (
+            <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: '10.5px', color: 'rgba(255,255,255,0.25)' }}>
+              {getYear(project)}
+            </span>
+          )}
+        </div>
+
+        <h3 style={{
+          fontFamily: 'var(--font-display, sans-serif)',
+          fontWeight: 800, fontSize: 'clamp(22px, 2.5vw, 30px)',
+          color: '#fafafa', letterSpacing: '-0.03em',
+          marginBottom: '14px', lineHeight: 1.15,
+        }}>
+          {project.title}
+        </h3>
+
+        <p style={{
+          fontSize: '14.5px', color: 'rgba(255,255,255,0.55)',
+          lineHeight: 1.75, marginBottom: '22px',
+          maxWidth: '420px',
+        }}>
+          {getDesc(project)}
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '28px' }}>
+          {tech.slice(0, 5).map(t => <TechPill key={t} label={t} />)}
+          {tech.length > 5 && <TechPill label={`+${tech.length - 5}`} />}
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                fontSize: '13px', fontWeight: 500,
+                color: 'rgba(255,255,255,0.7)',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                padding: '8px 16px', borderRadius: '9px',
+                textDecoration: 'none', transition: 'all 0.18s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#fafafa'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
+            >
+              <span>GitHub</span>
+            </a>
+          )}
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                fontSize: '13px', fontWeight: 500,
+                color: '#fff', background: 'rgba(124,106,247,1)',
+                padding: '8px 16px', borderRadius: '9px',
+                textDecoration: 'none', transition: 'all 0.18s ease',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(106,88,224,1)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(124,106,247,1)'; e.currentTarget.style.transform = 'none'; }}
+            >
+              Live Demo <ExternalLink size={13} />
+            </a>
+          )}
+          {project.slug ? (
+            <Link
+              to={`/projects/${project.slug}`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                fontSize: '13px', fontWeight: 500,
+                color: 'rgba(168,155,248,1)',
+                background: 'rgba(124,106,247,0.1)',
+                border: '1px solid rgba(124,106,247,0.22)',
+                padding: '8px 16px', borderRadius: '9px',
+                textDecoration: 'none', transition: 'all 0.18s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,106,247,0.18)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(124,106,247,0.1)'; }}
+            >
+              Case Study <ArrowRight size={13} />
+            </Link>
+          ) : (
+            <button
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                fontSize: '13px', fontWeight: 500,
+                color: 'rgba(168,155,248,1)',
+                background: 'rgba(124,106,247,0.1)',
+                border: '1px solid rgba(124,106,247,0.22)',
+                padding: '8px 16px', borderRadius: '9px',
+                cursor: 'pointer', transition: 'all 0.18s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,106,247,0.18)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(124,106,247,0.1)'; }}
+            >
+              Case Study <ArrowRight size={13} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div style={{
+        position: 'relative', overflow: 'hidden',
+        borderLeft: '1px solid rgba(255,255,255,0.07)',
+        minHeight: '380px',
+      }}>
+        <CoverImage src={image} title={project.title} height={380} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, rgba(124,106,247,0.06) 0%, transparent 60%)',
+          pointerEvents: 'none',
+        }} />
+      </div>
+
+      <style>{`
+        @media (max-width: 820px) {
+          .featured-card {
+            grid-template-columns: 1fr !important;
+          }
+          .featured-card > div:last-child {
+            border-left: none !important;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            min-height: 220px !important;
+          }
+        }
+        @media (max-width: 580px) {
+          .featured-card > div:first-child {
+            padding: 28px 24px !important;
+          }
+        }
+      `}</style>
+    </Motion.article>
+  );
+}
+
+function ProjectCard({ project, index }) {
+  const tech   = getTech(project);
+  const image  = getImage(project);
+  const status = getStatus(project);
+
+  return (
+    <Motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: index * 0.07 }}
+      style={{
+        background: 'rgba(17,17,19,1)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'all 0.22s ease',
+        cursor: 'default',
+      }}
+      whileHover={{
+        y: -5,
+        borderColor: 'rgba(255,255,255,0.15)',
+        transition: { duration: 0.2 },
+      }}
+    >
+      <div style={{ position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+        <CoverImage src={image} title={project.title} height={196} />
         <Motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12 md:mb-20"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          style={{
+            position: 'absolute', inset: 0,
+            background: 'rgba(9,9,11,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: '10px',
+          }}
         >
-          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 neon-text glow">
-            Featured Projects
+          {project.github && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '40px', height: '40px', borderRadius: '10px',
+                background: 'rgba(17,17,19,0.9)', border: '1px solid rgba(255,255,255,0.15)',
+                color: '#fafafa', textDecoration: 'none',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              <span>GH</span>
+            </a>
+          )}
+          {project.live && (
+            <a href={project.live} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '40px', height: '40px', borderRadius: '10px',
+                background: 'rgba(124,106,247,0.9)', border: '1px solid rgba(124,106,247,0.4)',
+                color: '#fff', textDecoration: 'none',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              <ArrowUpRight size={16} />
+            </a>
+          )}
+        </Motion.div>
+
+        <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+          <StatusBadge status={status} />
+        </div>
+      </div>
+
+      <div style={{ padding: '18px 20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{
+          fontFamily: 'var(--font-mono, monospace)',
+          fontSize: '10px', color: 'rgba(168,155,248,0.8)',
+          letterSpacing: '0.07em', textTransform: 'uppercase',
+          marginBottom: '6px',
+        }}>
+          {getCategory(project)}
+        </div>
+
+        <h4 style={{
+          fontFamily: 'var(--font-display, sans-serif)',
+          fontWeight: 700, fontSize: '16px',
+          color: '#fafafa', letterSpacing: '-0.02em',
+          marginBottom: '8px', lineHeight: 1.2,
+        }}>
+          {project.title}
+        </h4>
+
+        <p style={{
+          fontSize: '13.5px', color: 'rgba(255,255,255,0.5)',
+          lineHeight: 1.68, marginBottom: '16px',
+          flex: 1,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        }}>
+          {getDesc(project)}
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '16px' }}>
+          {tech.slice(0, 3).map(t => <TechPill key={t} label={t} />)}
+          {tech.length > 3 && <TechPill label={`+${tech.length - 3}`} />}
+        </div>
+
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.07)',
+        }}>
+          {project.slug ? (
+            <Link
+              to={`/projects/${project.slug}`}
+              style={{
+                fontSize: '12.5px', fontWeight: 500,
+                color: 'rgba(168,155,248,0.9)', textDecoration: 'none',
+                display: 'flex', alignItems: 'center', gap: '4px',
+                transition: 'color 0.15s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = 'rgba(168,155,248,1)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(168,155,248,0.9)'}
+            >
+              Case study <ArrowRight size={12} />
+            </Link>
+          ) : (
+            <span style={{ fontSize: '12.5px', color: 'rgba(255,255,255,0.25)' }}>
+              {getYear(project)}
+            </span>
+          )}
+
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '30px', height: '30px', borderRadius: '7px',
+                  border: '1px solid rgba(255,255,255,0.09)',
+                  color: 'rgba(255,255,255,0.45)',
+                  textDecoration: 'none', transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#fafafa'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; }}
+              >
+                <span>GH</span>
+              </a>
+            )}
+            {project.live && (
+              <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label="Live demo"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '30px', height: '30px', borderRadius: '7px',
+                  border: '1px solid rgba(124,106,247,0.2)',
+                  color: 'rgba(124,106,247,0.7)',
+                  textDecoration: 'none', transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'rgba(168,155,248,1)'; e.currentTarget.style.borderColor = 'rgba(124,106,247,0.4)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(124,106,247,0.7)'; e.currentTarget.style.borderColor = 'rgba(124,106,247,0.2)'; }}
+              >
+                <ExternalLink size={13} />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </Motion.article>
+  );
+}
+
+export default function Projects() {
+  const featured  = projects.find(p => p.featured);
+  const secondary = projects.filter(p => !p.featured);
+
+  return (
+    <section
+      id="projects"
+      style={{
+        padding: '96px 0',
+        borderTop: '1px solid rgba(255,255,255,0.07)',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+      }}
+    >
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem' }}>
+
+        <Motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: '52px' }}
+        >
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            fontFamily: 'var(--font-mono, monospace)',
+            fontSize: '11px', fontWeight: 500,
+            letterSpacing: '0.1em', textTransform: 'uppercase',
+            color: 'rgba(168,155,248,1)',
+            marginBottom: '14px',
+          }}>
+            <span style={{ display: 'block', width: '20px', height: '1px', background: 'rgba(124,106,247,1)' }} />
+            Projects
+          </div>
+
+          <h2 style={{
+            fontFamily: 'var(--font-display, sans-serif)',
+            fontWeight: 800,
+            fontSize: 'clamp(28px, 4vw, 42px)',
+            letterSpacing: '-0.03em',
+            color: '#fafafa',
+            marginBottom: '12px',
+            lineHeight: 1.05,
+          }}>
+            Things I've Built
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">
-            Real products I've built that solve business problems and generate revenue.
+          <p style={{
+            fontSize: '15.5px', color: 'rgba(255,255,255,0.5)',
+            maxWidth: '500px', lineHeight: 1.75, fontWeight: 300,
+          }}>
+            Real products with real problems. Each one ships code that solves something, teaches something, or earns something.
           </p>
         </Motion.div>
 
-        {/* Featured Project - Horizontal */}
-        {featured && (
+        {featured && <FeaturedCard project={featured} />}
+
+        {secondary.length > 0 && (
           <Motion.div
-            initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="glow-hover group mb-12 md:mb-20 rounded-3xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all"
-            whileHover={{ scale: 1.02 }}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.45 }}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              marginBottom: '24px', marginTop: '56px',
+              paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.07)',
+            }}
           >
-            <div className="grid md:grid-cols-2 items-center gap-6 md:gap-12 p-6 md:p-12">
-              <div className="order-2 md:order-1">
-                <span className="inline-block bg-blue-600/20 text-blue-400 px-4 py-1 rounded-full text-sm font-semibold mb-6 glow">
-                  Featured Project
-                </span>
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 group-hover:text-blue-400 transition-colors">
-                  {featured.title}
-                </h3>
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed max-w-lg">
-                  {featured.desc}
-                </p>
-                <div className="flex flex-wrap gap-4 mb-6">
-                  {featured.tech.map((t, i) => (
-                    <span key={i} className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm glow-hover">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-4">
-                  {featured.github && (
-                    <Button 
-                      name="GitHub" 
-                      style="glow-hover bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold transition-all border border-gray-600/50 flex items-center gap-2"
-                      onClick={() => openLink(featured.github)}
-                    >
-                      <Github size={20} />
-                    </Button>
-                  )}
-                  {featured.live && (
-                    <Button 
-                      name="Live Demo" 
-                      style="glow-hover bg-gradient-to-r from-emerald-600 to-green-600 text-white px-6 py-3 rounded-xl font-semibold glow hover:scale-105 transition-all flex items-center gap-2"
-                      onClick={() => openLink(featured.live)}
-                    >
-                      Live <ExternalLink size={20} />
-                    </Button>
-                  )}
-                  <Button 
-                    name="Case Study" 
-                    style="glow-hover bg-purple-600/90 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold glow transition-all flex items-center gap-2"
-                  >
-                    Case Study <ArrowRight size={20} />
-                  </Button>
-                </div>
-              </div>
-              <div className="order-1 md:order-2 relative">
-                <div className="relative z-10 glow-hover group-hover:scale-105 transition-transform">
-                  <img 
-                    src={featured.image} 
-                    alt={featured.title}
-                    className="w-full h-80 object-cover rounded-2xl shadow-2xl border-4 border-white/10 group-hover:border-blue-400/50 transition-all"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl" />
-                </div>
-              </div>
-            </div>
+            <span style={{
+              fontFamily: 'var(--font-display, sans-serif)',
+              fontWeight: 700, fontSize: '17px', color: '#fafafa',
+              letterSpacing: '-0.02em',
+            }}>
+              Other Notable Projects
+            </span>
+            <span style={{
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '11px', color: 'rgba(255,255,255,0.3)',
+            }}>
+              {secondary.length} project{secondary.length !== 1 ? 's' : ''}
+            </span>
           </Motion.div>
         )}
 
-        {/* Secondary Projects Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: '16px',
+          marginBottom: '48px',
+        }}>
+          {secondary.map((project, i) => (
+            <ProjectCard key={project.id} project={project} index={i} />
+          ))}
+        </div>
+
         <Motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center mb-16"
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          style={{ textAlign: 'center' }}
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-12 neon-text">
-            Other Notable Projects
-          </h3>
+          <Link
+            to="/projects"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+              fontSize: '14px', fontWeight: 500,
+              color: 'rgba(255,255,255,0.6)',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              padding: '11px 24px', borderRadius: '10px',
+              textDecoration: 'none', transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#fafafa'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+          >
+            View all projects <ArrowRight size={14} />
+          </Link>
         </Motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {secondary.map((project, index) => (
-            <Motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -15, scale: 1.03 }}
-              className="group glow-hover rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/20 hover:border-blue-500/50 transition-all cursor-pointer"
-            >
-              <div className="relative h-56 overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              <div className="p-8">
-                <h4 className="text-xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">
-                  {project.title}
-                </h4>
-                <p className="text-gray-300 mb-6 line-clamp-2">
-                  {project.desc}
-                </p>
-                <div className="flex gap-3">
-                  {project.github && (
-                    <button 
-                      onClick={() => openLink(project.github)}
-                      className="p-2 hover:glow-hover rounded-lg transition-all"
-                      title="GitHub"
-                    >
-                      <Github className="w-5 h-5 text-gray-400 hover:text-white" />
-                    </button>
-                  )}
-                  {project.live && (
-                    <button 
-                      onClick={() => openLink(project.live)}
-                      className="p-2 glow-hover rounded-lg transition-all"
-                      title="Live Demo"
-                    >
-                      <ExternalLink className="w-5 h-5 text-blue-400 hover:text-blue-300" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </Motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );
 }
-
-export default Projects;

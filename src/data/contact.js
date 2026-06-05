@@ -1,20 +1,18 @@
-/**
- * Contact Configuration
- * All Contact section content - making it reusable and data-driven
- */
+// ============================================================
+// CONTACT DATA — src/data/contact.js
+// Icons are imported directly here and passed as components.
+// This avoids any icon name mismatch in Contact.jsx.
+// ============================================================
+
+import { Mail, Phone, MapPin, MessageCircle, Link } from "lucide-react";
 
 export const contactConfig = {
-  // Heading and description
-  heading: "Let's Build Something",
-  description: "Have an idea or opportunity? Let's build it. I'm available for partnerships, projects, or turning your business concept into reality.",
-  note: "Primary: WhatsApp (fastest in Nigeria)",
-  
-  // Contact methods
   contacts: [
     {
       id: 1,
       title: 'WhatsApp',
-      desc: 'Fastest way to connect',
+      desc: '+234 706 214 0486',
+      icon: MessageCircle,
       link: 'https://wa.me/2347062140486',
       primary: true,
     },
@@ -22,30 +20,28 @@ export const contactConfig = {
       id: 2,
       title: 'Email',
       desc: 'oyovwevotukelvino@gmail.com',
+      icon: Mail,
       link: 'mailto:oyovwevotukelvino@gmail.com',
       primary: false,
     },
-    {
-      id: 3,
-      title: 'GitHub',
-      desc: '@oyovwevotukelvino-byte',
-      link: 'https://github.com/oyovwevotukelvino-byte',
-      primary: false,
-    },
-    {
-      id: 4,
-      title: 'LinkedIn',
-      desc: 'Oyovwevotu Kelvin',
-      link: 'https://www.linkedin.com/in/oyovwevotukelvin/',
-      primary: false,
-    },
+ {
+  id: 3,
+  title: 'GitHub',
+  desc: 'github.com/oyovwevotukelvino-byte',
+  icon: Link,
+  link: 'https://github.com/oyovwevotukelvino-byte',
+  primary: false,
+},
+{
+  id: 4,
+  title: 'LinkedIn',
+  desc: 'linkedin.com/in/oyovwevotukelvin',
+  icon: Link,
+  link: 'https://www.linkedin.com/in/oyovwevotukelvin/',
+  primary: false,
+},
   ],
-  
-  // Location info
-  location: 'Abuja, Nigeria • Open to Remote/Global',
-  
-  // Copyright
+
+  location: 'Abuja, Nigeria • Open to Remote / Global',
   copyright: '© 2025 Oyovwevotu Kelvin. Built in silence.',
 };
-
-export default contactConfig;

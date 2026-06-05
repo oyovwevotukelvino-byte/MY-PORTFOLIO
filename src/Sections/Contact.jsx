@@ -1,124 +1,378 @@
-import React from 'react';
+// ============================================================
+// CONTACT.JSX — v2.0 Merged
+//
+// Base: your original Contact.jsx (ThemeProvider + contactConfig driven)
+// Added: contact form panel with name/email/message + send state
+//
+// Dependencies (already in your project):
+//   framer-motion, lucide-react, ../theme/ThemeProvider, ../data/contact
+// ============================================================
+
+import { useState } from 'react';
 import { motion as Motion } from 'framer-motion';
-import { Mail, Github, Linkedin, MapPin, MessageCircle, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Check, Send, ArrowRight } from 'lucide-react';
 import { useTheme } from '../theme/ThemeProvider';
 import { contactConfig } from '../data/contact';
 
-/* ================= STYLES ================= */
+/* ── Icon map — extend as needed ───────────────────────────── */
+
+
+
+
+/* ── Style factory (same as your original) ─────────────────── */
 const getContactStyles = (colors) => ({
   section: {
     background: `linear-gradient(to bottom, ${colors.bg}, ${colors.bgSecondary})`,
   },
   primaryCard: {
-    border: `${colors.accentEmerald}80`,
-    background: `${colors.accentEmerald}0D`,
-    glow: colors.glow,
+    border: `${colors.accentColor}80`,
+    background: `${colors.accentColor}0D`,
   },
   card: {
     border: `${colors.cardBorder}`,
     background: `${colors.bg}50`,
-    hoverBorder: `${colors.accentEmerald}80`,
-    hoverBg: `${colors.accentEmerald}0D`,
-  },
-  iconPrimary: {
-    bg: `linear-gradient(135deg, ${colors.accentEmerald}50, ${colors.accent}50)`,
-    border: `${colors.accentEmerald}60`,
-    color: colors.accentEmerald,
-  },
-  iconSecondary: {
-    bg: `${colors.glass}`,
-    border: `${colors.glassBorder}`,
-    color: colors.textMuted,
-    hoverColor: colors.accentEmerald,
-  },
-  titlePrimary: {
-    color: colors.accentEmerald,
-    textShadow: colors.glowText,
-  },
-  titleSecondary: {
-    color: colors.textPrimary,
-    hoverColor: colors.accentEmerald,
-  },
-  descPrimary: colors.accentEmerald,
-  descSecondary: colors.textMuted,
-  locationCard: {
-    background: `${colors.bg}50`,
-    border: colors.cardBorder,
-    color: colors.textMuted,
+    hoverBorder: `${colors.accentColor}80`,
+    hoverBg: `${colors.accentColor}0D`,
   },
   border: colors.cardBorder,
 });
 
-/* ================= COMPONENT ================= */
+/* ── Shared input style ─────────────────────────────────────── */
+const baseInputStyle = {
+  width: '100%',
+  background: 'rgba(255,255,255,0.04)',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: '10px',
+  color: '#fafafa',
+  fontFamily: 'inherit',
+  fontSize: '14px',
+  padding: '11px 14px',
+  outline: 'none',
+  transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+  lineHeight: 1.5,
+};
+
+/* ── Contact Form sub-component ─────────────────────────────── */
+function ContactForm({ accentEmerald }) {
+  const [form,   setForm]   = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+
+  const handleChange = (e) =>
+    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) return;
+    setStatus('sending');
+
+    // ── Replace this block with your real handler ──────────────
+    // Option A — Formspree:
+    //   const res = await fetch('https://formspree.io/f/YOUR_ID', {
+    //     method: 'POST', headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(form),
+    //   });
+    //   setStatus(res.ok ? 'sent' : 'error');
+    //
+    // Option B — EmailJS:
+    //   await emailjs.send('SERVICE_ID', 'TEMPLATE_ID', form, 'PUBLIC_KEY');
+    //   setStatus('sent');
+    // ──────────────────────────────────────────────────────────
+    await new Promise(r => setTimeout(r, 1300)); // simulated delay
+    setStatus('sent');
+  };
+
+  const accentFocus = accentEmerald || '#10b981';
+  const focusOn  = (e) => {
+    e.target.style.borderColor = `${accentFocus}60`;
+    e.target.style.boxShadow   = `0 0 0 3px ${accentFocus}18`;
+  };
+  const focusOff = (e) => {
+    e.target.style.borderColor = 'rgba(255,255,255,0.1)';
+    e.target.style.boxShadow   = 'none';
+  };
+
+  /* ── Sent state ── */
+  if (status === 'sent') {
+    return (
+      <Motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          padding: '48px 24px', textAlign: 'center', gap: '16px',
+        }}
+      >
+        <div style={{
+          width: '56px', height: '56px', borderRadius: '50%',
+          background: `${accentFocus}18`,
+          border: `1px solid ${accentFocus}40`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Check size={24} color={accentFocus} strokeWidth={2.5} />
+        </div>
+        <h4 style={{ fontSize: '18px', fontWeight: 700, color: '#fafafa', margin: 0 }}>
+          Message sent!
+        </h4>
+        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0, lineHeight: 1.65 }}>
+          Thanks for reaching out. I'll get back to you within 24 hours.
+        </p>
+        <button
+          onClick={() => { setForm({ name:'', email:'', message:'' }); setStatus('idle'); }}
+          style={{
+            marginTop: '8px', background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.12)',
+            color: 'rgba(255,255,255,0.5)', fontSize: '13px',
+            padding: '7px 18px', borderRadius: '8px', cursor: 'pointer',
+            transition: 'all 0.18s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#fafafa'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; }}
+        >
+          Send another
+        </button>
+      </Motion.div>
+    );
+  }
+
+  /* ── Error state ── */
+  if (status === 'error') {
+    return (
+      <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+        <p style={{ color: '#f87171', marginBottom: '12px', fontSize: '14px' }}>
+          Something went wrong. Please try again or email me directly.
+        </p>
+        <button
+          onClick={() => setStatus('idle')}
+          style={{
+            background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
+            color: 'rgba(255,255,255,0.6)', fontSize: '13px',
+            padding: '7px 16px', borderRadius: '8px', cursor: 'pointer',
+          }}
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  /* ── Form ── */
+  return (
+    <form onSubmit={handleSubmit} noValidate style={{ padding: '28px 28px 32px' }}>
+      <h3 style={{
+        fontSize: '17px', fontWeight: 700, color: '#fafafa',
+        marginBottom: '22px', letterSpacing: '-0.02em',
+      }}>
+        Send a message
+      </h3>
+
+      {/* Name */}
+      <div style={{ marginBottom: '14px' }}>
+        <label
+          htmlFor="cf-name"
+          style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '6px', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'monospace' }}
+        >
+          Name
+        </label>
+        <input
+          id="cf-name" name="name" type="text"
+          placeholder="Your name"
+          value={form.name} onChange={handleChange}
+          required autoComplete="name"
+          style={baseInputStyle}
+          onFocus={focusOn} onBlur={focusOff}
+        />
+      </div>
+
+      {/* Email */}
+      <div style={{ marginBottom: '14px', }}>
+        <label
+          htmlFor="cf-email"
+          style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '6px', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'monospace' }}
+        >
+          Email
+        </label>
+        <input
+          id="cf-email" name="email" type="email"
+          placeholder="you@example.com"
+          value={form.email} onChange={handleChange}
+          required autoComplete="email"
+          style={baseInputStyle}
+          onFocus={focusOn} onBlur={focusOff}
+        />
+      </div>
+
+      {/* Message */}
+      <div style={{ marginBottom: '22px' }}>
+        <label
+          htmlFor="cf-message"
+          style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '6px', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'monospace' }}
+        >
+          Message
+        </label>
+        <textarea
+          id="cf-message" name="message"
+          placeholder="Tell me about your project or opportunity..."
+          rows={5}
+          value={form.message} onChange={handleChange}
+          required
+          style={{ ...baseInputStyle, resize: 'vertical', minHeight: '118px' }}
+          onFocus={focusOn} onBlur={focusOff}
+        />
+      </div>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={status === 'sending'}
+        style={{
+          width: '100%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+          background: status === 'sending'
+            ? 'rgba(16,185,129,0.5)'
+            : `linear-gradient(135deg, ${accentFocus}, ${accentFocus}cc)`,
+          border: 'none',
+          color: '#fff', fontSize: '14px', fontWeight: 600,
+          padding: '12px 20px', borderRadius: '10px',
+          cursor: status === 'sending' ? 'not-allowed' : 'pointer',
+          transition: 'all 0.2s ease',
+          letterSpacing: '0.01em',
+        }}
+        onMouseEnter={e => { if (status !== 'sending') e.currentTarget.style.opacity = '0.88'; }}
+        onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+      >
+        {status === 'sending'
+          ? <>Sending<span style={{ animation: 'cfDots 1.2s infinite' }}>…</span></>
+          : <><Send size={15} /> Send Message</>
+        }
+      </button>
+      <style>{`
+        @keyframes cfDots {
+          0%,100%{opacity:1} 50%{opacity:0.3}
+        }
+      `}</style>
+    </form>
+  );
+}
+
+/* ── Main Component ─────────────────────────────────────────── */
 function Contact({ config = contactConfig }) {
   const { colors } = useTheme();
   const styles = getContactStyles(colors);
-
-  const openLink = (url) => {
-    window.open(url, '_blank');
-  };
-
-  // Destructure config
-  const { heading, description, note, contacts, location, copyright } = config;
+  const {  contacts, location } = config;
+  
+ 
+  const openLink = (url) => window.open(url, '_blank');
 
   return (
-    <section 
-      id="contact" 
-      className="w-full py-16 md:py-24 px-4 md:px-6"
+    <section
+      id="contact"
+      className="section"
       style={styles.section}
     >
-      <div className="max-w-4xl mx-auto">
-        {/* Hero Intro */}
+      <div
+  className="container"
+  style={{
+    maxWidth: '740px',
+  }}
+>
+
+        {/* ── Hero intro ── */}
         <Motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-20"
         >
-          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 neon-text glow">
-            {heading}
-          </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed">
-            {description}
-          </p>
-          <div className="text-gray-500 text-base md:text-lg mb-12 md:mb-16">
-            {note}
-          </div>
+          <div className="section-label">
+  Contact
+</div>
+
+<h1
+  style={{
+    fontSize: 'clamp(32px,5vw,56px)',
+    lineHeight: 1.1,
+    marginBottom: '24px',
+    
+    
+  }}
+>
+  Let's Build Something Meaningful
+</h1>
+
+<p
+  style={{
+    fontSize: '16px',
+    lineHeight: 1.8,
+    color: 'var(--text-secondary)',
+    maxWidth: '640px',
+    margin: '0 auto 80px',
+    
+  }}
+>
+  Whether you're building a startup, launching a product,
+  exploring partnerships, or simply want to connect,
+  I'd love to hear from you.
+</p>
         </Motion.div>
 
-        {/* Contact Cards */}
-        <div className="grid sm:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-20">
+        {/* ── Contact cards (your original grid) ── */}
+       <div
+  style={{
+    background: 'var(--bg-card)',
+    border: `1px solid var(--border)`,
+    borderRadius: '20px',
+    padding: '28px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    marginBottom: '64px', 
+    maxWidth:'740px',
+    marginInline:'auto',
+    
+    
+  }}
+>
           {contacts.map((contact, index) => {
-            const Icon = MessageCircle; // Use fixed icon for now, or map icons
+            const Icon = contact.icon ?? MessageCircle;
+           console.log(contact);
+           console.log(contact.icon);
             return (
+              
               <Motion.div
-                key={contact.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className={`glow-hover group p-5 rounded-2xl border transition-all cursor-pointer ${
-                  contact.primary 
-                    ? 'border-emerald-500/50 bg-emerald-500/5  shadow-2xl glow' 
-                    : 'border-white/20 bg-black/30 hover:border-emerald-400/50 hover:bg-emerald-500/5'
-                }`}
-                onClick={() => openLink(contact.link)}
-              >
+  key={contact.id}
+  initial={{ opacity: 0, scale: 0.95 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.6, delay: index * 0.1 }}
+  whileHover={{ y: -4 }}
+  onClick={() => openLink(contact.link)}
+  style={{
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border)',
+    borderRadius: '16px',
+    padding: '24px',
+    cursor: 'pointer',
+    transition: 'all 0.25s ease',
+  }}
+>
                 <div className="flex items-start gap-6 mb-6">
                   <div className={`p-4 rounded-2xl glow flex-shrink-0 ${
-                    contact.primary 
-                      ? 'bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-500/40' 
+                    contact.primary
+                      ? 'bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-500/40'
                       : 'bg-white/10 border border-white/30'
                   }`}>
-                    <Icon className={`w-8 h-8 ${contact.primary ? 'text-emerald-400' : 'text-gray-400 group-hover:text-emerald-400 transition-colors'}`} />
+                    <Icon size={32} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className={`text-2xl font-bold mb-2 ${
-                      contact.primary ? 'text-emerald-400 neon-text' : 'text-white group-hover:text-emerald-400'
+                      contact.primary ? 'text-emerald-400 neon-text' : 'text-white group-hover:text-emerald-400 transition-colors'
                     }`}>
                       {contact.title}
                     </h3>
-                    <p className={`text-lg ${contact.primary ? 'text-emerald-300' : 'text-gray-400 group-hover:text-gray-300'}`}>
+                    <p className={`text-lg truncate ${
+                      contact.primary ? 'text-emerald-300' : 'text-gray-400 group-hover:text-gray-300 transition-colors'
+                    }`}>
                       {contact.desc}
                     </p>
                   </div>
@@ -133,22 +387,96 @@ function Contact({ config = contactConfig }) {
             );
           })}
         </div>
+       
 
-        {/* Location */}
+        {/* ── Contact Form ── */}
+        <Motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: '64px' }}
+        >
+          <div
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px',
+              overflow: 'hidden',
+              backdropFilter: 'blur(8px)',
+              transition: 'border-color 0.2s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = `${colors.accentColor}50`}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'}
+          >
+            {/* Card header strip */}
+            <div style={{
+              padding: '16px 28px',
+              borderBottom: '1px solid rgba(255,255,255,0.07)',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <div style={{
+                width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
+                background: `${colors.accentColor}18`,
+                border: `1px solid ${colors.accentColor}40`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Mail size={16} color={colors.accentColor} />
+              </div>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#fafafa', lineHeight: 1.2 }}>
+                  Or send a direct message
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'rgba(255,255,255,0.38)', marginTop: '1px' }}>
+                  I read every message and reply within 24 hours
+                </div>
+              </div>
+            </div>
+
+            {/* The form itself */}
+            <ContactForm accentEmerald={colors.accentColor} />
+            
+            
+          </div>
+          <div
+  style={{
+    textAlign: 'center',
+    marginBottom: '64px',
+  }}
+>
+  <p
+    style={{
+      color: 'var(--text-secondary)',
+      lineHeight: 1.8,
+    }}
+  >
+    Open to collaborations, freelance projects,
+    startup partnerships, and ambitious ideas.
+  </p>
+</div>
+        </Motion.div>
+
+        {/* ── Location + copyright (your original) ── */}
         <Motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center border-t border-white/10 pt-16"
         >
-          <div className="glow-hover inline-flex items-center gap-3 p-6 bg-black/30 rounded-2xl border border-white/20 max-w-sm mx-auto">
-            <MapPin className="w-6 h-6 text-gray-400" />
-            <span className="text-gray-400">{location}</span>
-          </div>
-          <p className="text-gray-600 text-sm mt-6">
-            {copyright}
-          </p>
+          <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    marginBottom: '16px',
+  }}
+>
+  <MapPin className="w-5 h-5 text-gray-400" />
+  <span className="text-gray-400">{location}</span>
+</div>
         </Motion.div>
+
       </div>
     </section>
   );

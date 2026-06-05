@@ -1,83 +1,241 @@
-import { useState } from "react";
-import Button from "./Button";
-import { Menu, X, Moon, Sun } from "lucide-react";
-import { useTheme } from "../theme/ThemeProvider";
+// ============================================================
+// NAVBAR — src/components/layout/Navbar.jsx
+// Sticky, blur-backdrop, active link highlighting,
+// mobile hamburger menu, always-visible Resume CTA.
+// ============================================================
 
-const Navbar = () => {
-    const [open, setOpen] = useState(false);
-    const { isDark, toggleTheme } = useTheme();
+import { useState, useEffect, useCallback } from 'react';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-        }
-        setOpen(false); // Close mobile menu
-    };
+const NAV_LINKS = [
+  { label: 'Home',     to: '/'         },
+  { label: 'Projects', to: '/projects' },
+  { label: 'Writing',  to: '/writing'  },
+  { label: 'About',    to: '/about'    },
+  { label: 'Contact',  to: '/contact'  },
+];
 
-    const toggleThemeMode = () => {
-        toggleTheme();
-        setOpen(false); // Close menu after toggle
-    };
+export default function Navbar() {
+  const [scrolled,    setScrolled]    = useState(false);
+  const [menuOpen,    setMenuOpen]    = useState(false);
+  const location = useLocation();
 
-    return (
-<nav className='flex justify-between items-center px-4 md:px-8 py-4 text-white border-b border-white/30 backdrop-blur-md sticky top-0 z-50'>
-            <a 
-                href="#hero" 
-                onClick={(e) => {e.preventDefault(); scrollToSection('hero');}}
-                className='font-bold text-xl neon-text cursor-pointer'
+  // Close menu on route change
+  useEffect(() => { setMenuOpen(false); }, [location]);
+
+  // Scroll shadow
+  const handleScroll = useCallback(() => {
+    setScrolled(window.scrollY > 12);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  return (
+    <header
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 200,
+        background: scrolled
+          ? 'rgba(9,9,11,0.88)'
+          : 'rgba(9,9,11,0.7)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: scrolled
+          ? '1px solid rgba(255,255,255,0.08)'
+          : '1px solid transparent',
+        transition: 'all 0.25s ease',
+      }}
+    >
+      <div
+        className="container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: 'var(--nav-height)',
+        }}
+      >
+        {/* Logo */}
+        <Link
+          to="/"
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
+            fontSize: '16px',
+            letterSpacing: '-0.03em',
+            color: 'var(--text-primary)',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2px',
+          }}
+        >
+          OK
+          <span style={{ color: 'var(--accent)', fontSize: '20px', lineHeight: 1 }}>.</span>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav
+          aria-label="Main navigation"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+          className="desktop-nav"
+        >
+          {NAV_LINKS.map(({ label, to }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              style={({ isActive }) => ({
+                fontFamily: 'var(--font-body)',
+                fontSize: '13.5px',
+                fontWeight: isActive ? 500 : 400,
+                color: isActive
+                  ? 'var(--text-primary)'
+                  : 'var(--text-secondary)',
+                background: isActive
+                  ? 'rgba(255,255,255,0.07)'
+                  : 'transparent',
+                padding: '6px 13px',
+                borderRadius: 'var(--radius-md)',
+                textDecoration: 'none',
+                transition: 'var(--transition-fast)',
+              })}
+              onMouseEnter={e => {
+                if (!e.currentTarget.getAttribute('aria-current')) {
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (!e.currentTarget.getAttribute('aria-current')) {
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                  e.currentTarget.style.background = 'transparent';
+                }
+              }}
             >
-                Oyovwevotu Kelvin 
-            </a>
-
-            {/* Desktop Menu */}
-            <ul className='hidden md:flex gap-6 font-medium cursor-pointer'>
-                <li onClick={() => scrollToSection('hero')}>Home</li>
-                <li onClick={() => scrollToSection('about')}>About</li>
-                <li onClick={() => scrollToSection('featured-project')}>Featured</li>
-                <li onClick={() => scrollToSection('skills')}>Skills</li>
-                <li onClick={() => scrollToSection('projects')}>Projects</li>
-                <li onClick={() => scrollToSection('mindset')}>Mindset</li>
-                <li onClick={() => scrollToSection('experience')}>Experience</li>
-            </ul>
-
-            <div className='hidden md:block'>
-                <Button name="Let’s Work" style='glow-hover bg-blue-600/20 text-white border border-blue-500/50 backdrop-blur-sm px-6 py-2 rounded-lg font-semibold hover:glow transition-all' />
-            </div>
-
-            {/* Hamburger Icon */}
-            <div className='md:hidden cursor-pointer' onClick={() => setOpen(!open)}>
-                {open ? <X size={28}/> : <Menu size={28}/>}
-            </div>
-
-            {/* Mobile Menu */}
-            {open && (
-                <div className='absolute top-16 left-0 w-full bg-black/90 border-t border-white/30 backdrop-blur-md md:hidden p-6 shadow-xl'>
-                    <ul className='flex flex-col gap-4 text-lg'>
-                        <li onClick={() => scrollToSection('hero')}>Home</li>
-                        <li onClick={() => scrollToSection('about')}>About</li>
-                        <li onClick={() => scrollToSection('featured-project')}>Featured</li>
-                        <li onClick={() => scrollToSection('skills')}>Skills</li>
-                        <li onClick={() => scrollToSection('projects')}>Projects</li>
-                        <li onClick={() => scrollToSection('mindset')}>Mindset</li>
-                        <li onClick={() => scrollToSection('experience')}>Experience</li>
-                        <li 
-                          onClick={toggleThemeMode}
-                          className='flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-all cursor-pointer'
-                          title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                        >
-                          {isDark ? <Sun size={24} className='text-yellow-400' /> : <Moon size={24} className='text-blue-400' />}
-                          <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
-                        </li>
-                    </ul>
-
-                    <div className='mt-6'>
-                        <Button name="Let’s Work" style='glow-hover bg-blue-600/20 text-white border border-blue-500/50 backdrop-blur-sm px-6 py-3 w-full rounded-lg font-semibold hover:glow transition-all' />
-                    </div>
-                </div>
-            )}
+              {label}
+            </NavLink>
+          ))}
         </nav>
-    );
-};
 
-export default Navbar;
+        {/* Right: Resume CTA + hamburger */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+            style={{ fontSize: '13px', padding: '8px 16px' }}
+          >
+            Resume
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+
+          {/* Hamburger — mobile only */}
+          <button
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(v => !v)}
+            style={{
+              display: 'none',   // shown via media query in CSS
+              background: 'none',
+              border: '1px solid var(--border-hover)',
+              borderRadius: 'var(--radius-sm)',
+              color: 'var(--text-secondary)',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              transition: 'var(--transition-fast)',
+            }}
+            className="hamburger-btn"
+          >
+            {menuOpen
+              ? <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              : <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu drawer */}
+      <div
+        aria-hidden={!menuOpen}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          top: 'var(--nav-height)',
+          background: 'rgba(9,9,11,0.97)',
+          backdropFilter: 'blur(12px)',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '2rem 1.5rem',
+          gap: '4px',
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? 'all' : 'none',
+          transition: 'opacity 0.2s ease',
+          zIndex: 199,
+        }}
+      >
+        {NAV_LINKS.map(({ label, to }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            style={({ isActive }) => ({
+              fontFamily: 'var(--font-display)',
+              fontSize: '22px',
+              fontWeight: 700,
+              color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+              textDecoration: 'none',
+              padding: '12px 16px',
+              borderRadius: 'var(--radius-md)',
+              background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',
+              transition: 'var(--transition-fast)',
+            })}
+          >
+            {label}
+          </NavLink>
+        ))}
+
+        <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+            style={{ width: '100%', justifyContent: 'center', fontSize: '15px', padding: '13px' }}
+          >
+            Download Resume ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Responsive styles */}
+      <style>{`
+        @media (max-width: 768px) {
+          .desktop-nav { display: none !important; }
+          .hamburger-btn { display: flex !important; }
+        }
+      `}</style>
+    </header>
+  );
+}

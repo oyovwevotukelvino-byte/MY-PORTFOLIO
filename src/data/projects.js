@@ -1,18 +1,27 @@
-import noraImg from '../assets/nora.png';
-import weatherImg from '../assets/weather.png';
+import noraImg      from '../assets/nora.png';
+import weatherImg   from '../assets/weather.png';
 import ecommerceImg from '../assets/ecommerce.png';
-import ticImg from '../assets/tictactoe.png';
-import sunflexImg from '../assets/sunflex.png';
+import ticImg       from '../assets/tictactoe.png';
+import sunflexImg   from '../assets/sunflex.png';
+
 export const projects = [
   {
     id: 1,
     title: 'Nora Clouds',
-    desc: 'A full-stack cloud platform built for real-world business use cases.',
-    tech: ['React', 'Node.js', 'Tailwind', 'Firebase'],
-     image: noraImg, // or use a screenshot
+    desc: 'A full-stack cloud platform built for real-world business use cases. Scaled from idea to 100+ users in 3 months, enabling real-time cloud storage for SMEs.',
+    tech: ['React', 'Node.js', 'Cloud Storage', 'Full-Stack'],
+    image: noraImg,
     live: 'https://noraclouds.vercel.app/',
     github: '',
     featured: true,
+    category: 'SaaS / Cloud',
+    status: 'Live',
+    year: 2024,
+    metrics: [
+      { label: 'Users',        value: '100+'  },
+      { label: 'Time to scale', value: '3 mo' },
+      { label: 'Stack',        value: 'Full'  },
+    ],
   },
   {
     id: 2,
@@ -23,6 +32,9 @@ export const projects = [
     live: 'https://weather-app-network.vercel.app/',
     github: '',
     featured: false,
+    category: 'Web App',
+    status: 'Live',
+    year: 2024,
   },
   {
     id: 3,
@@ -33,25 +45,34 @@ export const projects = [
     live: 'https://ecommercebuynow.netlify.app/',
     github: '',
     featured: false,
+    category: 'E-Commerce',
+    status: 'Live',
+    year: 2024,
   },
   {
     id: 4,
     title: 'Tic Tac Toe',
-    desc: 'Interactive two-player Tic Tac Toe game with clean UI.',
+    desc: 'Interactive two-player Tic Tac Toe game with clean UI and win detection.',
     tech: ['React', 'Vercel'],
     image: ticImg,
     live: 'https://tic-tac-toe-game-app-one.vercel.app/',
     github: '',
     featured: false,
+    category: 'Game',
+    status: 'Live',
+    year: 2024,
   },
   {
     id: 5,
     title: 'Sun Flex Solar Galaxy',
-    desc: ' Premium Unlimited Solar Energy For Modern Africa solar installations, energy .',
-    tech: ['React', 'Vercel'],
+    desc: 'Premium unlimited solar energy platform for modern Africa — solar installations, energy management and monitoring.',
+    tech: ['React', 'Vercel', 'Tailwind'],
     image: sunflexImg,
     live: 'https://sunflexsolargalaxy.vercel.app/',
     github: '',
     featured: false,
+    category: 'Energy / Startup',
+    status: 'Live',
+    year: 2024,
   },
 ];
