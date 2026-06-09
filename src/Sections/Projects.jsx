@@ -449,7 +449,7 @@ export default function Projects() {
         borderBottom: '1px solid rgba(255,255,255,0.07)',
       }}
     >
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem' }}>
+      <div className="container">
 
         <Motion.div
           initial={{ opacity: 0, y: 18 }}

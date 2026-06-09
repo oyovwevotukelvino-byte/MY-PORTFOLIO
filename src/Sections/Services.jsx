@@ -17,66 +17,153 @@ function Skills() {
   };
 
   return (
-<section id="skills" className="w-full py-16 md:py-24 px-4 md:px-6 bg-black/30 border-y border-white/10">
-      <div className="max-w-6xl mx-auto">
-        <Motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 neon-text glow">
-            Skills &amp; Expertise
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">
-            Real-world tools I use to build scalable digital products and businesses.
-          </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto mt-4 glow rounded-full" />
-        </Motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {skills.map((skill, index) => {
-            const Icon = getIcon(skill.title);
-            return (
-              <Motion.div
-                key={skill.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="group glow-hover p-8 rounded-2xl bg-gray-900/50 backdrop-blur-sm border border-white/20 cursor-pointer transition-all hover:bg-blue-500/10"
-              >
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl border border-blue-500/30 glow group-hover:glow-hover">
-                    <Icon className="w-10 h-10 text-blue-400 group-hover:text-blue-300 transition-colors" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
-                      {skill.title}
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed group-hover:text-gray-200">
-                      {skill.desc}
-                    </p>
-                  </div>
-                </div>
-              </Motion.div>
-            );
-          })}
-        </div>
-
-        <Motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-center mt-20"
-        >
-          <Button 
-            name="See My Projects" 
-            style="glow-hover bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl glow hover:scale-105 transition-all border-0"
-          />
-        </Motion.div>
+<section id="skills" className="section">
+  <div
+    style={{
+      maxWidth: '760px',
+      margin: '0 auto',
+      textAlign: 'center',
+    }}
+  >
+    {/* Header */}
+    <Motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      style={{ marginBottom: '80px' }}
+      
+    >
+      <div className="section-label">
+        Expertise
       </div>
-    </section>
+
+      <h2 className="section-title">
+        Skills & Expertise
+      </h2>
+
+      <p className="section-desc">
+        The tools, technologies, and capabilities I use
+        to design, build, and scale modern digital products.
+      </p>
+    </Motion.div>
+
+    {/* Skills */}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        marginBottom: '96px',
+      }}
+    >
+      {skills.map((skill, index) => {
+        const Icon = getIcon(skill.title);
+
+        return (
+          <Motion.div
+            key={skill.id}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.5,
+              delay: index * 0.08,
+            }}
+            whileHover={{ y: -2 }}
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px',
+              padding: '32px',
+              textAlign: 'left',
+              transition: 'all 0.25s ease',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                gap: '20px',
+                alignItems: 'flex-start',
+              }}
+            >
+              <div
+                style={{
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--accent-muted)',
+                  border: '1px solid var(--accent-border)',
+                  flexShrink: 0,
+                }}
+              >
+                <Icon
+                  size={24}
+                  style={{
+                    color: 'var(--accent-text)',
+                  }}
+                />
+              </div>
+
+              <div>
+                <h3
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    marginBottom: '10px',
+                    color: 'var(--text-primary)',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {skill.title}
+                </h3>
+
+                <p
+                  style={{
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.8,
+                    fontSize: '15px',
+                    margin: 0,
+                  }}
+                >
+                  {skill.desc}
+                </p>
+              </div>
+            </div>
+          </Motion.div>
+        );
+      })}
+    </div>
+
+    {/* Footer CTA */}
+    <Motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
+      <p
+        style={{
+          color: 'var(--text-secondary)',
+          lineHeight: 1.8,
+          marginBottom: '32px',
+        }}
+      >
+        From frontend interfaces to backend systems,
+        I focus on building products that are fast,
+        scalable, and designed for real business impact.
+      </p>
+
+      <Button
+        name="View My Projects"
+        style="btn btn-primary"
+      />
+    </Motion.div>
+  </div>
+</section>
   );
 }
 

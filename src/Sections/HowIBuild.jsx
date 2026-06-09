@@ -45,32 +45,7 @@ const PRINCIPLES = [
 ];
 
 const SKILL_GROUPS = [
-  {
-    group: 'Frontend',
-    badges: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Next.js', 'Responsive Design'],
-  },
-  {
-    group: 'Backend',
-    badges: ['Node.js', 'Express', 'REST APIs', 'Authentication', 'WebSockets', 'Serverless'],
-  },
-  {
-    group: 'Data',
-    badges: ['MongoDB', 'PostgreSQL', 'Prisma', 'Database Design', 'Indexing'],
-  },
-  {
-    group: 'Engineering',
-    badges: ['AI Integration', 'Performance Optimization', 'Security', 'Testing', 'CI/CD', 'Docker', 'Deployment'],
-  },
-  {
-    group: 'Product',
-    badges: ['Problem Solving', 'Architecture Thinking', 'User Research', 'Entrepreneurship', 'Leadership'],
-  },
-  {
-    
-    group:'Payment Integrations',
-    badges:['Stripe',' Paystack', 'Flutterwave', '- Secure real-world', 'payment systems'],
-    icon: 'CreditCard'
-  },
+  
 ];
 
 function Badge({ label }) {
@@ -172,13 +147,7 @@ export default function HowIBuild() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h3 style={{
-            fontFamily: 'var(--font-display)', fontWeight: 700,
-            fontSize: '17px', color: 'var(--text-primary)',
-            marginBottom: '28px', letterSpacing: '-0.01em',
-          }}>
-            Technologies & Skills
-          </h3>
+          
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
             {SKILL_GROUPS.map((group, gi) => (

@@ -10,7 +10,7 @@
 
 import { useState } from 'react';
 import { motion as Motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Check, Send, ArrowRight } from 'lucide-react';
+import { Mail, MapPin, Check, Send, ArrowRight } from 'lucide-react';
 import { useTheme } from '../theme/ThemeProvider';
 import { contactConfig } from '../data/contact';
 
@@ -22,7 +22,8 @@ import { contactConfig } from '../data/contact';
 /* ── Style factory (same as your original) ─────────────────── */
 const getContactStyles = (colors) => ({
   section: {
-    background: `linear-gradient(to bottom, ${colors.bg}, ${colors.bgSecondary})`,
+    /* Force contact section to pure black */
+    background: '#000000',
   },
   primaryCard: {
     border: `${colors.accentColor}80`,
@@ -54,32 +55,30 @@ const baseInputStyle = {
 
 /* ── Contact Form sub-component ─────────────────────────────── */
 function ContactForm({ accentEmerald }) {
-  const [form,   setForm]   = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const formIsActive = true;
 
   const handleChange = (e) =>
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
-    setStatus('sending');
+  e.preventDefault();
+  if (!form.name || !form.email || !form.message) return;
 
-    // ── Replace this block with your real handler ──────────────
-    // Option A — Formspree:
-    //   const res = await fetch('https://formspree.io/f/YOUR_ID', {
-    //     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(form),
-    //   });
-    //   setStatus(res.ok ? 'sent' : 'error');
-    //
-    // Option B — EmailJS:
-    //   await emailjs.send('SERVICE_ID', 'TEMPLATE_ID', form, 'PUBLIC_KEY');
-    //   setStatus('sent');
-    // ──────────────────────────────────────────────────────────
-    await new Promise(r => setTimeout(r, 1300)); // simulated delay
-    setStatus('sent');
-  };
+  setStatus('sending');
+  try {
+    const res = await fetch('https://formspree.io/f/meewzqeq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+    setStatus(res.ok ? 'sent' : 'error');
+  } catch {
+    setStatus('error');
+  }
+};
+
 
   const accentFocus = accentEmerald || '#10b981';
   const focusOn  = (e) => {
@@ -141,7 +140,7 @@ function ContactForm({ accentEmerald }) {
     return (
       <div style={{ padding: '32px 24px', textAlign: 'center' }}>
         <p style={{ color: '#f87171', marginBottom: '12px', fontSize: '14px' }}>
-          Something went wrong. Please try again or email me directly.
+          Contact form not yet active. Please use WhatsApp or Email above.
         </p>
         <button
           onClick={() => setStatus('idle')}
@@ -157,16 +156,34 @@ function ContactForm({ accentEmerald }) {
     );
   }
 
+  if (status === 'inactive') {
+    return (
+      <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+        
+        <button
+          onClick={() => setStatus('idle')}
+          style={{
+            background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
+            color: 'rgba(255,255,255,0.8)', fontSize: '13px',
+            padding: '7px 16px', borderRadius: '8px', cursor: 'pointer',
+          }}
+        >
+          Back to form
+        </button>
+      </div>
+    );
+  }
+
   /* ── Form ── */
   return (
     <form onSubmit={handleSubmit} noValidate style={{ padding: '28px 28px 32px' }}>
       <h3 style={{
         fontSize: '17px', fontWeight: 700, color: '#fafafa',
-        marginBottom: '22px', letterSpacing: '-0.02em',
+        marginBottom: '12px', letterSpacing: '-0.02em',
       }}>
         Send a message
       </h3>
-
+      
       {/* Name */}
       <div style={{ marginBottom: '14px' }}>
         <label
@@ -180,7 +197,8 @@ function ContactForm({ accentEmerald }) {
           placeholder="Your name"
           value={form.name} onChange={handleChange}
           required autoComplete="name"
-          style={baseInputStyle}
+          disabled={!formIsActive}
+          style={{ ...baseInputStyle, opacity: formIsActive ? 1 : 0.55, cursor: formIsActive ? 'text' : 'not-allowed' }}
           onFocus={focusOn} onBlur={focusOff}
         />
       </div>
@@ -198,7 +216,8 @@ function ContactForm({ accentEmerald }) {
           placeholder="you@example.com"
           value={form.email} onChange={handleChange}
           required autoComplete="email"
-          style={baseInputStyle}
+          disabled={!formIsActive}
+          style={{ ...baseInputStyle, opacity: formIsActive ? 1 : 0.55, cursor: formIsActive ? 'text' : 'not-allowed' }}
           onFocus={focusOn} onBlur={focusOff}
         />
       </div>
@@ -217,7 +236,8 @@ function ContactForm({ accentEmerald }) {
           rows={5}
           value={form.message} onChange={handleChange}
           required
-          style={{ ...baseInputStyle, resize: 'vertical', minHeight: '118px' }}
+          disabled={!formIsActive}
+          style={{ ...baseInputStyle, resize: 'vertical', minHeight: '118px', opacity: formIsActive ? 1 : 0.55, cursor: formIsActive ? 'text' : 'not-allowed' }}
           onFocus={focusOn} onBlur={focusOff}
         />
       </div>
@@ -225,24 +245,28 @@ function ContactForm({ accentEmerald }) {
       {/* Submit */}
       <button
         type="submit"
-        disabled={status === 'sending'}
+        disabled={!formIsActive || status === 'sending'}
         style={{
           width: '100%',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-          background: status === 'sending'
-            ? 'rgba(16,185,129,0.5)'
-            : `linear-gradient(135deg, ${accentFocus}, ${accentFocus}cc)`,
+          background: !formIsActive
+            ? 'rgba(255,255,255,0.08)'
+            : status === 'sending'
+              ? 'rgba(16,185,129,0.5)'
+              : `linear-gradient(135deg, ${accentFocus}, ${accentFocus}cc)`,
           border: 'none',
           color: '#fff', fontSize: '14px', fontWeight: 600,
           padding: '12px 20px', borderRadius: '10px',
-          cursor: status === 'sending' ? 'not-allowed' : 'pointer',
+          cursor: !formIsActive || status === 'sending' ? 'not-allowed' : 'pointer',
           transition: 'all 0.2s ease',
           letterSpacing: '0.01em',
         }}
-        onMouseEnter={e => { if (status !== 'sending') e.currentTarget.style.opacity = '0.88'; }}
+        onMouseEnter={e => { if (formIsActive && status !== 'sending') e.currentTarget.style.opacity = '0.88'; }}
         onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
       >
-        {status === 'sending'
+        {!formIsActive
+          ? <><Send size={15} /> Message form disabled</>
+          : status === 'sending'
           ? <>Sending<span style={{ animation: 'cfDots 1.2s infinite' }}>…</span></>
           : <><Send size={15} /> Send Message</>
         }
@@ -335,9 +359,7 @@ function Contact({ config = contactConfig }) {
   }}
 >
           {contacts.map((contact, index) => {
-            const Icon = contact.icon ?? MessageCircle;
-           console.log(contact);
-           console.log(contact.icon);
+            const Icon = contact.icon ?? null;
             return (
               
               <Motion.div

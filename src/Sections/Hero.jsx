@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { heroData } from '../data/hero';
-import profileImg from '../assets/IMG.jpg';
 import image from '../assets/Image.jpeg';
 
 // ── Framer variants ──────────────────────────────────────────
@@ -153,7 +152,7 @@ export default function Hero() {
             <motion.div variants={item} style={{
               display: 'flex', flexWrap: 'wrap', gap: '10px',
               marginBottom: '40px' ,
-            }}>
+            }} className="cta-row">
               <Link to={ctas.primary.href} className="btn btn-primary" style={{ fontSize: '14px', padding: '11px 22px' }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
                 {ctas.primary.label}
@@ -170,7 +169,7 @@ export default function Hero() {
 
             {/* Socials + location */}
             <motion.div variants={item} style={{
-              display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', background: 'linear-gradient(90deg, var(--accent-text) 0%, #210a7d 50%, #f1f2f4 100%)',
+              display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', 
               borderRadius: 'var(--radius-md)',
             }}>
               <span style={{
@@ -230,7 +229,7 @@ export default function Hero() {
               display: 'flex', gap: '28px', flexWrap: 'wrap', marginTop: '48px',
               paddingTop: '32px',
               borderTop: '1px solid var(--border)',
-            }}>
+            }} className="stats-row">
               {stats.map(s => (
                 <div key={s.label} style={{ borderLeft: '2px solid var(--accent-border)', paddingLeft: '14px' }}>
                   <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '22px', color: 'var(--text-primary)', lineHeight: 1 }}>
@@ -269,7 +268,7 @@ export default function Hero() {
               }} />
 
               {/* Orbit rings */}
-              <div style={{
+              <div className="orbit-ring" style={{
                 position: 'absolute', borderRadius: '50%',
                 border: '1px solid rgba(124,106,247,0.1)',
                 width: '260px', height: '260px',
@@ -280,7 +279,7 @@ export default function Hero() {
                 
                 <div style={{ position: 'absolute', top: '-3px', left: '50%', marginLeft: '-3px', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)' }} />
               </div>
-              <div style={{
+              <div className="orbit-ring" style={{
                 position: 'absolute', borderRadius: '50%',
                 border: '1px solid rgba(124,106,247,0.06)',
                 width: '360px', height: '360px',
@@ -348,14 +347,34 @@ export default function Hero() {
           }
           .hero-image-col > div {
             width: 200px !important;
-            height: 320px !important;
+            height: 280px !important;
           }
+          .hero-grid .cta-row  {
+           justify-content: center;
+           }
+          .hero-grid .stats-row { 
+           justify-content: center;
+         }
+          .hero-image-col .orbit-ring {
+            display: none !important;
+          }
+
+          .hero-image-col img{
+            width: 160px !important;
+            height: 160px !important;}
         }
         @media (max-width: 480px) {
           .hero-image-col >div {
-          width: 120px !important;
-          height: 120px !important;
+          width: 160px !important;
+          height: 160px !important;
           border-radius: 50% !important; 
+         }
+
+          .hero-image-col img{
+            width: 130px !important;
+            height: 130px !important;
+            border-radius: 50% !important;
+           }
         }
       `}</style>
     </section>
