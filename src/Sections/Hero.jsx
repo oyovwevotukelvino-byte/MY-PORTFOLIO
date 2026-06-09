@@ -227,7 +227,7 @@ export default function Hero() {
 
             {/* Stats row */}
             <motion.div variants={item} style={{
-              display: 'flex', gap: '28px', marginTop: '48px',
+              display: 'flex', gap: '28px', flexWrap: 'wrap', marginTop: '48px',
               paddingTop: '32px',
               borderTop: '1px solid var(--border)',
             }}>
@@ -236,7 +236,7 @@ export default function Hero() {
                   <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '22px', color: 'var(--text-primary)', lineHeight: 1 }}>
                     {s.value}
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', letterSpacing: '0.02em' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px', letterSpacing: '0.02em' }}>
                     {s.label}
                   </div>
                 </div>
@@ -316,7 +316,7 @@ export default function Hero() {
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                   {name.first} {name.last}
                 </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
                   Full-Stack Developer
                 </div>
               </div>
@@ -352,7 +352,10 @@ export default function Hero() {
           }
         }
         @media (max-width: 480px) {
-          .hero-image-col { display: none; }
+          .hero-image-col >div {
+          width: 120px !important;
+          height: 120px !important;
+          border-radius: 50% !important; 
         }
       `}</style>
     </section>

@@ -24,7 +24,7 @@ export default function About() {
           <div className="section-label">About</div>
           <h1 style={{ fontSize:'clamp(28px,4vw,48px)', marginBottom:'24px' }}>Who I am</h1>
           <p style={{ fontSize:'16px', color:'var(--text-secondary)', lineHeight:1.8, marginBottom:'16px' }}>
-            I'm <strong style={{ color:'var(--text-primary)' }}>Oyovwevotu Kelvin</strong> — a full-stack developer, entrepreneur, and creative builder from Nigeria.
+            I'm <strong style={{ color:'var(--text-primary)' }}>Oyovwevotu Kelvin</strong> —  a Nigerian software developer and entrepreneur building technology solutions that connect business, creativity, and innovation across Africa.
             I build technology that combines software, business thinking, creativity, and innovation  I build systems that scale businesses. 
             From payment integrations that handle real transactions to export platforms connecting Nigeria to Dubai markets.
           </p>
