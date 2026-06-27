@@ -3,6 +3,7 @@ import weatherImg   from '../assets/weather.png';
 import ecommerceImg from '../assets/ecommerce.png';
 import ticImg       from '../assets/tictactoe.png';
 import sunflexImg   from '../assets/sunflex.png';
+import DavidImg     from '../assets/david.png';
 
 export const projects = [
   {
@@ -74,5 +75,18 @@ export const projects = [
     category: 'Energy / Startup',
     status: 'Live',
     year: 2024,
+  },
+  {
+    id: 6,
+    title: 'David Uchechukwu Ministry Platform ',
+    desc: 'A modern ministry website powered by Next.js and Sanity CMS featuring dynamic sermons, devotionals, SEO optimization, social sharing, and a fully responsive design.',
+    tech: ['Next.js','TypeScript','Tailwind CSS','Sanity CMS','Framer Motion','Vercel'],
+    image: DavidImg,
+    live: 'https://daviduchechukwu.vercel.app/',
+    github: '',
+    featured: false,
+    category: ' modern ministry / Blog',
+    status: 'Live',
+    year: 2026,
   },
 ];
