@@ -19,7 +19,9 @@ const Writing  = lazy(() => import('../Pages/Writing'));
 const About    = lazy(() => import('../Pages/About'));
 const Contact  = lazy(() => import('../Pages/Contact'));
 
-// const CaseStudy = lazy(() => import('../Pages/CaseStudy'));  // uncomment when ready
+const ProjectDetails = lazy(() => import("../Pages/ProjectDetails"));
+
+const CaseStudy = lazy(() => import("../Pages/CaseStudy"));
 
 // Simple full-page loading fallback
 function PageLoader() {
@@ -129,7 +131,8 @@ export default function AppRoutes() {
           <Route path="/writing"   element={<Writing />}  />
           <Route path="/about"     element={<About />}    />
           <Route path="/contact"   element={<Contact />}  />
-          {/* <Route path="/projects/:slug" element={<CaseStudy />} /> */}
+          
+          <Route path="/projects/:slug"  element={<CaseStudy />} />
         </Routes>
       </Suspense>
       
