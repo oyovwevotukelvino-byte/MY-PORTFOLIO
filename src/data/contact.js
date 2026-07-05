@@ -4,7 +4,12 @@
 // This avoids any icon name mismatch in Contact.jsx.
 // ============================================================
 
-import { Mail, Phone, MapPin, MessageCircle, Link } from "lucide-react";
+import {
+  Mail,
+  MessageCircle,
+  Link,
+  X
+} from "lucide-react";
 
 export const contactConfig = {
   contacts: [
@@ -38,6 +43,14 @@ export const contactConfig = {
   desc: 'linkedin.com/in/oyovwevotukelvin',
   icon: Link,
   link: 'https://www.linkedin.com/in/oyovwevotukelvin/',
+  primary: false,
+},
+{
+  id: 5,
+  title: "X (Twitter)",
+  desc: "twitter.com/oyovwevotukelvin",
+  icon: X,
+  link: "https://twitter.com/0yovwevotu",
   primary: false,
 },
   ],
